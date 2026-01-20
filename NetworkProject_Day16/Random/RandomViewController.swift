@@ -69,7 +69,7 @@ class RandomViewController: UIViewController {
     
 }
 
-extension RandomViewController: VCDesign {
+extension RandomViewController: ViewDesign {
     func configureUI() {
         
         [
