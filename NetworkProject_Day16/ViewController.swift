@@ -8,6 +8,9 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let vc1 = RandomViewController()
+    let vc2 = BoxOfficeViewController()
+
 
     @IBOutlet var randomBtn: UIButton!
     
@@ -20,13 +23,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func randomBtnTapped(_ sender: UIButton) {
-        let vc = RandomViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        
+        navigationController?.pushViewController(vc1, animated: true)
     }
     
     @IBAction func boxOfficeBtnTapped(_ sender: UIButton) {
-        let vc = BoxOfficeViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        
+        navigationController?.pushViewController(vc2, animated: true)
 
     }
 }
