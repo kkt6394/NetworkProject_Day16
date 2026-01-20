@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol ViewDesign {
+protocol ViewDesign: AnyObject{
     func configureUI()
 }

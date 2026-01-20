@@ -33,6 +33,11 @@ class BoxOfficeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureCell(data: Movie.BoxOfficeResult.DailyBoxOfficeList) {
+        rankLabel.text = data.rank
+        titleLabel.text = data.movieNm
+        dateLabel.text = data.openDt
+    }
 }
 
 extension BoxOfficeTableViewCell: ViewDesign {
