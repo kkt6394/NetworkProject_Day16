@@ -12,6 +12,7 @@ class BoxOfficeTableViewCell: UITableViewCell {
 
     let rankLabel = {
         let label = UILabel()
+        label.textAlignment = .center
         return label
     }()
     
@@ -21,6 +22,7 @@ class BoxOfficeTableViewCell: UITableViewCell {
     }()
     let dateLabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 10)
         return label
     }()
     
@@ -52,13 +54,14 @@ extension BoxOfficeTableViewCell: ViewDesign {
         rankLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().offset(20)
-            make.width.equalTo(40)
+            make.width.equalTo(20)
             make.height.equalTo(20)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(rankLabel.snp.trailing).offset(24)
+            make.leading.equalTo(rankLabel.snp.trailing).offset(10)
+            make.trailing.equalTo(dateLabel.snp.leading).offset(-10)
         }
         
         dateLabel.snp.makeConstraints { make in
