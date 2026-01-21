@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JE5-HV-egP">
-                                <rect key="frame" x="146.66666666666666" y="265" width="100" height="100"/>
+                                <rect key="frame" x="146.66666666666666" y="176" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="CNP-zu-lJf"/>
                                     <constraint firstAttribute="width" constant="100" id="KTs-hE-5zn"/>
@@ -29,7 +29,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r07-rk-qqp">
-                                <rect key="frame" x="146.66666666666666" y="429" width="100" height="100"/>
+                                <rect key="frame" x="146.66666666666666" y="376" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="ElA-lF-CEP"/>
                                     <constraint firstAttribute="width" constant="100" id="VTG-9N-Z1u"/>
@@ -40,12 +40,26 @@
                                     <action selector="boxOfficeBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KMQ-4q-DoL"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUC-Qy-sLg">
+                                <rect key="frame" x="146.66666666666666" y="576" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="7BQ-3u-TzZ"/>
+                                    <constraint firstAttribute="height" constant="100" id="IeY-tW-ddA"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Shopping"/>
+                                <connections>
+                                    <action selector="shoppingBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="x2H-WR-5TO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="r07-rk-qqp" secondAttribute="bottom" constant="255" id="eq3-07-OoZ"/>
-                            <constraint firstItem="JE5-HV-egP" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="93" id="iWG-kE-4II"/>
+                            <constraint firstItem="r07-rk-qqp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2Rc-G3-M08"/>
+                            <constraint firstItem="jUC-Qy-sLg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Egx-if-AqU"/>
+                            <constraint firstItem="r07-rk-qqp" firstAttribute="top" secondItem="JE5-HV-egP" secondAttribute="bottom" constant="100" id="U2d-RP-NCV"/>
+                            <constraint firstItem="jUC-Qy-sLg" firstAttribute="top" secondItem="r07-rk-qqp" secondAttribute="bottom" constant="100" id="Y35-mv-kaV"/>
                             <constraint firstItem="JE5-HV-egP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="o5S-fR-p0r"/>
                             <constraint firstItem="r07-rk-qqp" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oea-fW-1p9"/>
                         </constraints>
@@ -54,6 +68,7 @@
                     <connections>
                         <outlet property="boxOfiiceBtn" destination="r07-rk-qqp" id="FND-s1-qNp"/>
                         <outlet property="randomBtn" destination="JE5-HV-egP" id="im8-QQ-3Id"/>
+                        <outlet property="shoppingBtn" destination="jUC-Qy-sLg" id="J8o-8j-Daj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
