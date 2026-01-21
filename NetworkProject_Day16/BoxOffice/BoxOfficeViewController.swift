@@ -37,6 +37,8 @@ class BoxOfficeViewController: UIViewController {
             BoxOfficeTableViewCell.self,
             forCellReuseIdentifier: String(describing: BoxOfficeTableViewCell.self)
         )
+        tableView.separatorColor = .clear
+        tableView.backgroundColor = .clear
         return tableView
     }()
     

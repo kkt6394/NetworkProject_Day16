@@ -13,16 +13,21 @@ class BoxOfficeTableViewCell: UITableViewCell {
     let rankLabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.backgroundColor = .white
+        label.font = .boldSystemFont(ofSize: 16)
         return label
     }()
     
     let titleLabel = {
         let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 16)
+        label.textColor = .white
         return label
     }()
     let dateLabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 10)
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .white
         return label
     }()
     
@@ -49,12 +54,12 @@ extension BoxOfficeTableViewCell: ViewDesign {
         ].forEach {
             contentView.addSubview($0)
         }
-        
+        contentView.backgroundColor = .black
         
         rankLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(20)
-            make.width.equalTo(20)
+            make.leading.equalToSuperview().offset(10)
+            make.width.equalTo(40)
             make.height.equalTo(20)
         }
         
@@ -66,7 +71,7 @@ extension BoxOfficeTableViewCell: ViewDesign {
         
         dateLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-20)
+            make.trailing.equalToSuperview().offset(-10)
         }
     }
     
