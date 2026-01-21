@@ -15,7 +15,10 @@ class RandomViewController: UIViewController {
     let button = {
         let button = UIButton()
         button.setTitle("랜덤 이미지 불러오기", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = .systemBlue
+        button.addTarget(self, action: #selector(btnTapped), for: .touchUpInside)
+        button.layer.cornerRadius = 10
+
         return button
     }()
     
@@ -27,13 +30,16 @@ class RandomViewController: UIViewController {
     
     let authorLabel = {
         let label = UILabel()
-        label.text = "authorLabel"
+        label.text = ""
+        label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
     
     let resolutionLabel = {
         let label = UILabel()
-        label.text = "resolutionLabel"
+        label.text = ""
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .lightGray
         return label
     }()
     
@@ -58,7 +64,7 @@ class RandomViewController: UIViewController {
                     let url = URL(string: value.download_url)
                     self.imageView.kf.setImage(with: url)
                     self.authorLabel.text = "작가: \(value.author)"
-                    self.resolutionLabel.text = "\(value.width) x \(value.height)"
+                    self.resolutionLabel.text = "해상도: \(value.width) x \(value.height)"
                     
                     
                 case .failure(let error):
@@ -103,7 +109,6 @@ extension RandomViewController: ViewDesign {
     }
     
     func configureBtn() {
-        button.addTarget(self, action: #selector(btnTapped), for: .touchUpInside)
     }
     
     
