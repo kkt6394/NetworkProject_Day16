@@ -19,7 +19,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        randomBtn.backgroundColor = .systemRed
+        boxOfiiceBtn.backgroundColor = .systemGreen
     }
 
     @IBAction func randomBtnTapped(_ sender: UIButton) {
