@@ -17,8 +17,10 @@ class ShoppingDetailViewController: UIViewController {
     
     var keyword = "캠핑카"
 
-    let resultCountLabel = {
+    lazy var resultCountLabel = {
         let label = UILabel()
+        label.textColor = .green
+        print(#function)
         return label
     }()
     
@@ -97,7 +99,10 @@ class ShoppingDetailViewController: UIViewController {
             .responseDecodable(of: ShoppingData.self) { response in
                 switch response.result {
                 case .success(let value):
-                    dump(value)
+                    print(#function)
+                    DispatchQueue.main.async {
+                        self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
+                    }
                     self.currentData = value.items
                     self.collectionView.reloadData()
                 case .failure(let error):
