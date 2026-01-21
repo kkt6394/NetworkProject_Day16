@@ -47,6 +47,8 @@ class ShoppingDetailViewController: UIViewController {
         button.backgroundColor = .black
         return button
     }()
+    
+    let collectionView = UICollectionView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +64,7 @@ extension ShoppingDetailViewController: ViewDesign {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         [
-            resultCountLabel, accuracyBtn, dateBtn, hPriceBtn, lPriceBtn
+            resultCountLabel, accuracyBtn, dateBtn, hPriceBtn, lPriceBtn, collectionView
         ].forEach { view.addSubview($0) }
         
         resultCountLabel.snp.makeConstraints { make in
@@ -76,15 +78,20 @@ extension ShoppingDetailViewController: ViewDesign {
         }
         dateBtn.snp.makeConstraints { make in
             make.top.equalTo(resultCountLabel.snp.bottom).offset(10)
-            make.leading.equalTo(accuracyBtn.snp.trailing)
+            make.leading.equalTo(accuracyBtn.snp.trailing).offset(10)
         }
         hPriceBtn.snp.makeConstraints { make in
             make.top.equalTo(resultCountLabel.snp.bottom).offset(10)
-            make.leading.equalTo(dateBtn.snp.trailing)
+            make.leading.equalTo(dateBtn.snp.trailing).offset(10)
         }
         lPriceBtn.snp.makeConstraints { make in
             make.top.equalTo(resultCountLabel.snp.bottom).offset(10)
-            make.leading.equalTo(hPriceBtn.snp.trailing)
+            make.leading.equalTo(hPriceBtn.snp.trailing).offset(10)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(accuracyBtn.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.bottom.equalToSuperview()
         }
         
         
