@@ -19,25 +19,39 @@ class ShoppingDetailCollectionViewCell: UICollectionViewCell {
     
     let likeBtn = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "info.circle"), for: .application)
+        let config = UIImage.SymbolConfiguration(pointSize: 24)
+        let image = UIImage(systemName: "heart", withConfiguration: config)
+        button.setImage(image, for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
         return button
     }()
     
     let mallNameLabel = {
         let label = UILabel()
         label.text = "mallNameLabel"
+        label.textColor = .systemGray4
+        label.lineBreakMode = .byTruncatingTail
+        label.font = .systemFont(ofSize: 16)
         return label
     }()
     
     let itemNameLabel = {
         let label = UILabel()
         label.text = "itemNameLabel"
+        label.textColor = .systemGray6
+        label.numberOfLines = 2
+        label.lineBreakMode = .byTruncatingTail
+        label.font = .systemFont(ofSize: 18)
         return label
     }()
     
     let priceLabel = {
         let label = UILabel()
         label.text = "priceLabel"
+        label.textColor = .white
+        label.font = .boldSystemFont(ofSize: 20)
+
         return label
     }()
     
@@ -55,7 +69,7 @@ class ShoppingDetailCollectionViewCell: UICollectionViewCell {
         imageView.kf.setImage(with: url)
         mallNameLabel.text = data.mallName
         itemNameLabel.text = data.title
-        priceLabel.text = data.lprice
+        priceLabel.text = Int(data.lprice)?.formatted()
     }
 }
 
@@ -67,12 +81,13 @@ extension ShoppingDetailCollectionViewCell: ViewDesign {
         
         imageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview()
+            make.size.equalTo(180)
         }
         
         likeBtn.snp.makeConstraints { make in
             make.size.equalTo(50)
-            make.trailing.equalTo(imageView.snp.trailing).inset(20)
-            make.bottom.equalTo(imageView.snp.bottom).inset(20)
+            make.trailing.equalTo(imageView.snp.trailing).inset(4)
+            make.bottom.equalTo(imageView.snp.bottom).inset(4)
         }
         
         mallNameLabel.snp.makeConstraints { make in
@@ -82,13 +97,18 @@ extension ShoppingDetailCollectionViewCell: ViewDesign {
         
         itemNameLabel.snp.makeConstraints { make in
             make.top.equalTo(mallNameLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.leading).offset(10)
+            make.horizontalEdges.equalTo(imageView).inset(10)
         }
         
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(itemNameLabel.snp.bottom).offset(4)
             make.leading.equalTo(imageView.snp.leading).offset(10)
         }
+        
+        imageView.layer.cornerRadius = 20
+        imageView.clipsToBounds = true
+        
+        likeBtn.cornerConfiguration = .capsule()
 
         
     }

@@ -63,7 +63,7 @@ class ShoppingDetailViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let width = 180
-        let height = 200
+        let height = 300
         layout.itemSize = CGSize(width: width, height: height)
         layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
@@ -135,7 +135,7 @@ extension ShoppingDetailViewController: ViewDesign {
         print(self, #function)
         navigationItem.title = navigationItemTitle
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        collectionView.backgroundColor = .brown
+        collectionView.backgroundColor = .black
         
         [
             resultCountLabel, accuracyBtn, dateBtn, hPriceBtn, lPriceBtn, collectionView
