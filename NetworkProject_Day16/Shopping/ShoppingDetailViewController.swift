@@ -11,11 +11,19 @@ import Alamofire
 import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
+    
+    enum Sort: String {
+        case sim
+        case date
+        case asc
+        case dsc
+    }
+    
     var navigationItemTitle: String?
     
     var currentData: [ShoppingData.Items] = []
     
-    var keyword = "캠핑카"
+    var keyword: String?
 
     lazy var resultCountLabel = {
         let label = UILabel()
@@ -29,6 +37,11 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("정확도", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
+        button.addTarget(
+            self,
+            action: #selector(accuracyBtnTapped),
+            for: .touchUpInside
+        )
         return button
     }()
     
@@ -37,6 +50,11 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("날짜순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
+        button.addTarget(
+            self,
+            action: #selector(dateBtnTapped),
+            for: .touchUpInside
+        )
         return button
     }()
 
@@ -45,6 +63,11 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("가격높은순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
+        button.addTarget(
+            self,
+            action: #selector(hPriceBtnTapped),
+            for: .touchUpInside
+        )
         return button
     }()
 
@@ -53,6 +76,12 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("가격낮은순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
+        button.addTarget(
+            self,
+            action: #selector(lPriceBtnTapped),
+            for: .touchUpInside
+        )
+
         return button
     }()
     
@@ -76,10 +105,27 @@ class ShoppingDetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         setCollectionView()
-        callRequest()
+        callRequest(sort: .sim)
     }
     
-    func callRequest() {
+    @objc
+    func accuracyBtnTapped() {
+        callRequest(sort: .sim)
+    }
+    @objc
+    func dateBtnTapped() {
+        callRequest(sort: .date)
+    }
+    @objc
+    func hPriceBtnTapped() {
+        callRequest(sort: .dsc)
+    }
+    @objc
+    func lPriceBtnTapped() {
+        callRequest(sort: .asc)
+    }
+    
+    func callRequest(sort: Sort) {
         let url = "https://openapi.naver.com/v1/search/shop.json"
         let header: HTTPHeaders = [
             "X-Naver-Client-Id": APIKey.clientID,
@@ -87,7 +133,8 @@ class ShoppingDetailViewController: UIViewController {
         ]
         let param: Parameters = [
             "query": keyword,
-            "display": 100
+            "display": 100,
+            "sort": sort
         ]
         AF.request(
             url,
