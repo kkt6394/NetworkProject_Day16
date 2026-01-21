@@ -37,11 +37,7 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("정확도", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
-        button.addTarget(
-            self,
-            action: #selector(accuracyBtnTapped),
-            for: .touchUpInside
-        )
+
         return button
     }()
     
@@ -50,11 +46,6 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("날짜순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
-        button.addTarget(
-            self,
-            action: #selector(dateBtnTapped),
-            for: .touchUpInside
-        )
         return button
     }()
 
@@ -63,11 +54,6 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("가격높은순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
-        button.addTarget(
-            self,
-            action: #selector(hPriceBtnTapped),
-            for: .touchUpInside
-        )
         return button
     }()
 
@@ -76,12 +62,6 @@ class ShoppingDetailViewController: UIViewController {
         button.setTitle("가격낮은순", for: .normal)
         button.titleLabel?.textColor = .white
         button.backgroundColor = .black
-        button.addTarget(
-            self,
-            action: #selector(lPriceBtnTapped),
-            for: .touchUpInside
-        )
-
         return button
     }()
     
@@ -106,6 +86,30 @@ class ShoppingDetailViewController: UIViewController {
         configureUI()
         setCollectionView()
         callRequest(sort: .sim)
+        buttonConfigure()
+    }
+    
+    func buttonConfigure() {
+        accuracyBtn.addTarget(
+            self,
+            action: #selector(accuracyBtnTapped),
+            for: .touchUpInside
+        )
+        dateBtn.addTarget(
+            self,
+            action: #selector(dateBtnTapped),
+            for: .touchUpInside
+        )
+        hPriceBtn.addTarget(
+            self,
+            action: #selector(hPriceBtnTapped),
+            for: .touchUpInside
+        )
+        lPriceBtn.addTarget(
+            self,
+            action: #selector(lPriceBtnTapped),
+            for: .touchUpInside
+        )
     }
     
     @objc
@@ -157,6 +161,19 @@ class ShoppingDetailViewController: UIViewController {
                 }
             }
     }
+}
+
+extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        currentData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
+        cell.configureCell(data: currentData[indexPath.item])
+        return cell
+    }
     
     func setCollectionView() {
         collectionView.delegate = self
@@ -170,19 +187,8 @@ class ShoppingDetailViewController: UIViewController {
     }
 }
 
-extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        currentData.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureCell(data: currentData[indexPath.item])
-        return cell
-    }
-}
-
 extension ShoppingDetailViewController: ViewDesign {
+    
     func configureUI() {
         print(self, #function)
         navigationItem.title = navigationItemTitle
