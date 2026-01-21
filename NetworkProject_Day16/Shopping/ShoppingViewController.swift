@@ -46,7 +46,7 @@ extension ShoppingViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print(self, #function)
         let vc = ShoppingDetailViewController()
-        guard let text = searchBar.text else { return }
+        guard let text = searchBar.text, text.count >= 2 else { return }
         vc.keyword = text
         vc.navigationItemTitle = text
         navigationController?.pushViewController(vc, animated: true)
