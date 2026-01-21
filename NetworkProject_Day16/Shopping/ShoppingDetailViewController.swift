@@ -48,11 +48,36 @@ class ShoppingDetailViewController: UIViewController {
         return button
     }()
     
-    let collectionView = UICollectionView()
+    lazy var collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: setCollectionViewLayout()
+    )
+    
+    func setCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let width = 180
+        let height = 200
+        layout.itemSize = CGSize(width: width, height: height)
+        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        return layout
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        setCollectionView()
+    }
+    func setCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(
+            ShoppingDetailCollectionViewCell.self,
+            forCellWithReuseIdentifier: String(
+                describing: ShoppingDetailCollectionViewCell.self
+            )
+        )
 
     }
     
@@ -62,6 +87,7 @@ extension ShoppingDetailViewController: ViewDesign {
     func configureUI() {
         navigationItem.title = "TITLE"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        collectionView.backgroundColor = .brown
         
         [
             resultCountLabel, accuracyBtn, dateBtn, hPriceBtn, lPriceBtn, collectionView
@@ -93,8 +119,18 @@ extension ShoppingDetailViewController: ViewDesign {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalToSuperview()
         }
+    }
+}
+
+extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        100
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
         
-        
+        return cell
     }
     
     
