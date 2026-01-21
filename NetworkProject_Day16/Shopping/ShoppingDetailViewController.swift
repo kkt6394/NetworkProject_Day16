@@ -7,9 +7,11 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
+    var keyword = "캠핑카"
 
     let resultCountLabel = {
         let label = UILabel()
@@ -68,7 +70,36 @@ class ShoppingDetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         setCollectionView()
+        callRequest()
     }
+    
+    func callRequest() {
+        let url = "https://openapi.naver.com/v1/search/shop.json"
+        let header: HTTPHeaders = [
+            "X-Naver-Client-Id": APIKey.clientID,
+            "X-Naver-Client-Secret": APIKey.clientSecret
+        ]
+        let param: Parameters = [
+            "query": keyword,
+            "display": 100
+        ]
+        AF.request(
+            url,
+            method: .get,
+            parameters: param,
+            encoding: URLEncoding.queryString,
+            headers: header
+        )
+            .responseDecodable(of: ShoppingData.self) { response in
+                switch response.result {
+                case .success(let value):
+                    dump(value)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
     func setCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -78,9 +109,19 @@ class ShoppingDetailViewController: UIViewController {
                 describing: ShoppingDetailCollectionViewCell.self
             )
         )
+    }
+}
 
+extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        100
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
+        
+        return cell
+    }
 }
 
 extension ShoppingDetailViewController: ViewDesign {
@@ -122,16 +163,3 @@ extension ShoppingDetailViewController: ViewDesign {
     }
 }
 
-extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        100
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
-        
-        return cell
-    }
-    
-    
-}
