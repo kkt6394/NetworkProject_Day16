@@ -21,7 +21,6 @@ class ShoppingViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
     }
-    
 }
 
 extension ShoppingViewController: ViewDesign {
@@ -44,4 +43,8 @@ extension ShoppingViewController: ViewDesign {
 
 extension ShoppingViewController: UISearchBarDelegate {
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let vc = ShoppingDetailViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
