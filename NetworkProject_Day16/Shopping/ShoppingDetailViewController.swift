@@ -11,6 +11,10 @@ import Alamofire
 import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
+    var navigationItemTitle: String?
+    
+    var currentData: [ShoppingData.Items] = []
+    
     var keyword = "캠핑카"
 
     let resultCountLabel = {
@@ -94,6 +98,8 @@ class ShoppingDetailViewController: UIViewController {
                 switch response.result {
                 case .success(let value):
                     dump(value)
+                    self.currentData = value.items
+                    self.collectionView.reloadData()
                 case .failure(let error):
                     print(error)
                 }
@@ -114,19 +120,20 @@ class ShoppingDetailViewController: UIViewController {
 
 extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        100
+        currentData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: ShoppingDetailCollectionViewCell.self), for: indexPath) as? ShoppingDetailCollectionViewCell else { return UICollectionViewCell() }
-        
+        cell.configureCell(data: currentData[indexPath.item])
         return cell
     }
 }
 
 extension ShoppingDetailViewController: ViewDesign {
     func configureUI() {
-        navigationItem.title = "TITLE"
+        print(self, #function)
+        navigationItem.title = navigationItemTitle
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         collectionView.backgroundColor = .brown
         

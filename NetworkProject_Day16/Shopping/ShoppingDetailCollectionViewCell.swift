@@ -49,6 +49,14 @@ class ShoppingDetailCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configureCell(data: ShoppingData.Items) {
+        let url = URL(string: data.image)
+        imageView.kf.setImage(with: url)
+        mallNameLabel.text = data.mallName
+        itemNameLabel.text = data.title
+        priceLabel.text = data.lprice
+    }
 }
 
 extension ShoppingDetailCollectionViewCell: ViewDesign {
