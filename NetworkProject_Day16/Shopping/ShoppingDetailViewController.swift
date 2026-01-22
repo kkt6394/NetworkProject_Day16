@@ -11,9 +11,7 @@ import Alamofire
 import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
-    
-    var isSelected: Bool?
-    
+        
     enum Sort: String {
         case sim
         case date
@@ -35,10 +33,8 @@ class ShoppingDetailViewController: UIViewController {
     }()
     
     let accuracyBtn = ShoppingDetailViewButton(buttonTitle: "정확도")
-    
     let dateBtn = ShoppingDetailViewButton(buttonTitle: "날짜순")
     let hPriceBtn = ShoppingDetailViewButton(buttonTitle: "가격높은순")
-
     let lPriceBtn = ShoppingDetailViewButton(buttonTitle: "가격낮은순")
     
     lazy var collectionView = UICollectionView(
@@ -64,11 +60,7 @@ class ShoppingDetailViewController: UIViewController {
         callRequest(sort: .sim)
         buttonTargetConfigure()
     }
-    
-    func selectedBtnConfigure() {
         
-    }
-    
     func buttonTargetConfigure() {
         accuracyBtn.addTarget(
             self,
@@ -92,6 +84,9 @@ class ShoppingDetailViewController: UIViewController {
         )
     }
     
+    // 줄일 방법 질문.
+    // 1. 상태 관리.
+    // 2. 메서드 화.
     @objc
     func accuracyBtnTapped() {
         callRequest(sort: .sim)
@@ -104,6 +99,7 @@ class ShoppingDetailViewController: UIViewController {
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
     }
+    
     @objc
     func dateBtnTapped() {
         callRequest(sort: .date)
@@ -116,6 +112,7 @@ class ShoppingDetailViewController: UIViewController {
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
     }
+    
     @objc
     func hPriceBtnTapped() {
         callRequest(sort: .dsc)
@@ -127,8 +124,8 @@ class ShoppingDetailViewController: UIViewController {
         dateBtn.titleLabel?.textColor = .white
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
-
     }
+    
     @objc
     func lPriceBtnTapped() {
         callRequest(sort: .asc)
@@ -140,7 +137,6 @@ class ShoppingDetailViewController: UIViewController {
         dateBtn.titleLabel?.textColor = .white
         hPriceBtn.backgroundColor = .black
         hPriceBtn.titleLabel?.textColor = .white
-
     }
     
     func callRequest(sort: Sort) {
