@@ -57,7 +57,7 @@ class ShoppingDetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         setCollectionView()
-        callRequest(sort: .sim)
+        accuracyBtnTapped()
         buttonTargetConfigure()
     }
         
