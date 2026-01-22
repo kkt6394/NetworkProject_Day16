@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 
 class ShoppingViewController: UIViewController {
-
+    
+    var userDefaultsArr: [String] = []
+    
     lazy var searchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "브랜드, 상품, 프로필, 태그 등"
@@ -26,6 +28,11 @@ class ShoppingViewController: UIViewController {
         configureUI()
         configureTableView()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print(#function)
+        tableView.isHidden = true
+    }
 }
 
 extension ShoppingViewController: ViewDesign {
@@ -39,26 +46,28 @@ extension ShoppingViewController: ViewDesign {
                 
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.horizontalEdges.equalToSuperview().offset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
         }
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(400)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.height.equalTo(185)
         }
     }
 }
 
 extension ShoppingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        userDefaultsArr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: KeywordHistoryTableViewCell.self), for: indexPath) as? KeywordHistoryTableViewCell else { return UITableViewCell() }
+        cell.configureCell(data: userDefaultsArr[indexPath.row])
         return cell
     }
-    
+        
     func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -66,7 +75,8 @@ extension ShoppingViewController: UITableViewDelegate, UITableViewDataSource {
             KeywordHistoryTableViewCell.self,
             forCellReuseIdentifier: String(describing: KeywordHistoryTableViewCell.self)
         )
-        tableView.rowHeight = 80
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .black
     }
 }
 
@@ -78,6 +88,24 @@ extension ShoppingViewController: UISearchBarDelegate {
         guard let text = searchBar.text, text.count >= 2 else { return }
         vc.keyword = text
         vc.navigationItemTitle = text
+        UserDefaults.standard.set(text, forKey: "keyword")
+        guard let saved = UserDefaults.standard.string(forKey: "keyword") else { return }
+        userDefaultsArr.insert(saved, at: 0)
+        searchBar.resignFirstResponder()
+
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print(#function)
+        if userDefaultsArr.isEmpty {
+            tableView.isHidden = true
+        } else {
+            tableView.isHidden = false
+        }
+        tableView.reloadData()
+        print(#function)
+    }
+        
+    
 }

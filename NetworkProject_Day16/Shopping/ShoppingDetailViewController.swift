@@ -57,7 +57,9 @@ class ShoppingDetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         setCollectionView()
-        accuracyBtnTapped()
+        callRequest(sort: .sim)
+        accuracyBtn.backgroundColor = .white
+        accuracyBtn.setTitleColor(UIColor.black, for: .normal)
         buttonTargetConfigure()
     }
         
@@ -98,6 +100,7 @@ class ShoppingDetailViewController: UIViewController {
         hPriceBtn.titleLabel?.textColor = .white
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     }
     
     @objc
@@ -111,6 +114,7 @@ class ShoppingDetailViewController: UIViewController {
         hPriceBtn.titleLabel?.textColor = .white
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     }
     
     @objc
@@ -124,6 +128,7 @@ class ShoppingDetailViewController: UIViewController {
         dateBtn.titleLabel?.textColor = .white
         lPriceBtn.backgroundColor = .black
         lPriceBtn.titleLabel?.textColor = .white
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     }
     
     @objc
@@ -137,6 +142,7 @@ class ShoppingDetailViewController: UIViewController {
         dateBtn.titleLabel?.textColor = .white
         hPriceBtn.backgroundColor = .black
         hPriceBtn.titleLabel?.textColor = .white
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
     }
     
     func callRequest(sort: Sort) {
