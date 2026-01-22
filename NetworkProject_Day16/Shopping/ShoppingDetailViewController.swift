@@ -12,6 +12,8 @@ import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
     
+    var isSelected: Bool?
+    
     enum Sort: String {
         case sim
         case date
@@ -32,38 +34,12 @@ class ShoppingDetailViewController: UIViewController {
         return label
     }()
     
-    let accuracyBtn = {
-        let button = UIButton()
-        button.setTitle("정확도", for: .normal)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .black
-
-        return button
-    }()
+    let accuracyBtn = ShoppingDetailViewButton(buttonTitle: "정확도")
     
-    let dateBtn = {
-        let button = UIButton()
-        button.setTitle("날짜순", for: .normal)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .black
-        return button
-    }()
+    let dateBtn = ShoppingDetailViewButton(buttonTitle: "날짜순")
+    let hPriceBtn = ShoppingDetailViewButton(buttonTitle: "가격높은순")
 
-    let hPriceBtn = {
-        let button = UIButton()
-        button.setTitle("가격높은순", for: .normal)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .black
-        return button
-    }()
-
-    let lPriceBtn = {
-        let button = UIButton()
-        button.setTitle("가격낮은순", for: .normal)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .black
-        return button
-    }()
+    let lPriceBtn = ShoppingDetailViewButton(buttonTitle: "가격낮은순")
     
     lazy var collectionView = UICollectionView(
         frame: .zero,
@@ -86,10 +62,14 @@ class ShoppingDetailViewController: UIViewController {
         configureUI()
         setCollectionView()
         callRequest(sort: .sim)
-        buttonConfigure()
+        buttonTargetConfigure()
     }
     
-    func buttonConfigure() {
+    func selectedBtnConfigure() {
+        
+    }
+    
+    func buttonTargetConfigure() {
         accuracyBtn.addTarget(
             self,
             action: #selector(accuracyBtnTapped),
@@ -115,18 +95,52 @@ class ShoppingDetailViewController: UIViewController {
     @objc
     func accuracyBtnTapped() {
         callRequest(sort: .sim)
+        accuracyBtn.backgroundColor = .white
+        accuracyBtn.setTitleColor(UIColor.black, for: .normal)
+        dateBtn.backgroundColor = .black
+        dateBtn.titleLabel?.textColor = .white
+        hPriceBtn.backgroundColor = .black
+        hPriceBtn.titleLabel?.textColor = .white
+        lPriceBtn.backgroundColor = .black
+        lPriceBtn.titleLabel?.textColor = .white
     }
     @objc
     func dateBtnTapped() {
         callRequest(sort: .date)
+        dateBtn.backgroundColor = .white
+        dateBtn.setTitleColor(UIColor.black, for: .normal)
+        accuracyBtn.backgroundColor = .black
+        accuracyBtn.titleLabel?.textColor = .white
+        hPriceBtn.backgroundColor = .black
+        hPriceBtn.titleLabel?.textColor = .white
+        lPriceBtn.backgroundColor = .black
+        lPriceBtn.titleLabel?.textColor = .white
     }
     @objc
     func hPriceBtnTapped() {
         callRequest(sort: .dsc)
+        hPriceBtn.backgroundColor = .white
+        hPriceBtn.setTitleColor(UIColor.black, for: .normal)
+        accuracyBtn.backgroundColor = .black
+        accuracyBtn.titleLabel?.textColor = .white
+        dateBtn.backgroundColor = .black
+        dateBtn.titleLabel?.textColor = .white
+        lPriceBtn.backgroundColor = .black
+        lPriceBtn.titleLabel?.textColor = .white
+
     }
     @objc
     func lPriceBtnTapped() {
         callRequest(sort: .asc)
+        lPriceBtn.backgroundColor = .white
+        lPriceBtn.setTitleColor(UIColor.black, for: .normal)
+        accuracyBtn.backgroundColor = .black
+        accuracyBtn.titleLabel?.textColor = .white
+        dateBtn.backgroundColor = .black
+        dateBtn.titleLabel?.textColor = .white
+        hPriceBtn.backgroundColor = .black
+        hPriceBtn.titleLabel?.textColor = .white
+
     }
     
     func callRequest(sort: Sort) {
