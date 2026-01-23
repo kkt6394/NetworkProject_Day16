@@ -42,7 +42,9 @@ class KeywordHistoryTableViewCell: UITableViewCell {
     
     func configureCell(data: String) {
         keywordLabel.text = data
+        
     }
+    
 }
 
 

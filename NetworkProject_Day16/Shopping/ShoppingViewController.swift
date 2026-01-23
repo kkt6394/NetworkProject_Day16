@@ -26,6 +26,23 @@ class ShoppingViewController: UIViewController {
     
     let tableView = UITableView()
     
+    lazy var headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+    
+    let recentKeywordLabel = {
+        let label = UILabel()
+        label.text = "최근 검색어"
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let deleteBtn = {
+        let button = UIButton()
+        button.setTitle("전체 삭제", for: .normal)
+        return button
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -36,6 +53,20 @@ class ShoppingViewController: UIViewController {
         print(#function)
         tableView.isHidden = true
     }
+    
+    @objc
+    func deleteBtnTapped() {
+        userDefaultsArr.removeAll()
+        tableView.reloadData()
+    }
+    
+    @objc
+    func deleteBtnTapped2(_ sender: UIButton) {
+        userDefaultsArr.remove(at: sender.tag)
+        tableView.reloadData()
+    }
+    
+    
 }
 
 extension ShoppingViewController: ViewDesign {
@@ -46,6 +77,10 @@ extension ShoppingViewController: ViewDesign {
         [
             searchBar, tableView
         ].forEach { view.addSubview($0) }
+        
+        [
+            recentKeywordLabel, deleteBtn
+        ].forEach { headerView.addSubview($0) }
                 
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
@@ -56,6 +91,16 @@ extension ShoppingViewController: ViewDesign {
             make.top.equalTo(searchBar.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(185)
+        }
+        
+        recentKeywordLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview()
+        }
+        
+        deleteBtn.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(20)
         }
     }
 }
@@ -68,8 +113,12 @@ extension ShoppingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: KeywordHistoryTableViewCell.self), for: indexPath) as? KeywordHistoryTableViewCell else { return UITableViewCell() }
         cell.configureCell(data: userDefaultsArr[indexPath.row])
+        cell.deleteBtn.tag = indexPath.row
+        cell.deleteBtn.addTarget(self, action: #selector(deleteBtnTapped2), for: .touchUpInside)
         return cell
     }
+    
+
         
     func configureTableView() {
         tableView.dataSource = self
@@ -80,6 +129,8 @@ extension ShoppingViewController: UITableViewDelegate, UITableViewDataSource {
         )
         tableView.separatorStyle = .none
         tableView.backgroundColor = .black
+        tableView.tableHeaderView = headerView
+        deleteBtn.addTarget(self, action: #selector(deleteBtnTapped), for: .touchUpInside)
     }
 }
 
