@@ -9,7 +9,10 @@ import UIKit
 import SnapKit
 
 class ShoppingViewController: UIViewController {
-    
+    var firstUserDefaults: [String] = []
+    lazy var converted = Set(firstUserDefaults)
+    var result: Set<String> = []
+    lazy var data = converted.filter { result.insert($0).inserted }
     var userDefaultsArr: [String] = []
     
     lazy var searchBar = {
@@ -85,7 +88,7 @@ extension ShoppingViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print(self, #function)
         let vc = ShoppingDetailViewController()
-        guard let text = searchBar.text, text.count >= 2 else { return }
+        guard let text = searchBar.text/*, text.count >= 2*/ else { return }
         vc.keyword = text
         vc.navigationItemTitle = text
         UserDefaults.standard.set(text, forKey: "keyword")

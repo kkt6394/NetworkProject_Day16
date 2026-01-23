@@ -156,24 +156,30 @@ class ShoppingDetailViewController: UIViewController {
             "display": 100,
             "sort": sort
         ]
-        AF.request(
-            url,
-            method: .get,
-            parameters: param,
-            encoding: URLEncoding.queryString,
-            headers: header
-        )
-            .responseDecodable(of: ShoppingData.self) { response in
-                switch response.result {
-                case .success(let value):
-                    print(#function)
-                    self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
-                    self.currentData = value.items
-                    self.collectionView.reloadData()
-                case .failure(let error):
-                    print(error)
-                }
+        let request = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.queryString, headers: header)
+//        AF.request(
+//            url,
+//            method: .get,
+//            parameters: param,
+//            encoding: URLEncoding.queryString,
+//            headers: header
+//        )
+        request
+        .responseDecodable(of: ShoppingData.self) { response in
+            switch response.result {
+            case .success(let value):
+                print(#function)
+                print("성공", response.response?.statusCode)
+                self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
+                self.currentData = value.items
+                self.collectionView.reloadData()
+                print(">>>", request, "<<<")
+
+            case .failure(let error):
+                print(error)
+                print("실패", response.response?.statusCode)
             }
+        }
     }
 }
 
