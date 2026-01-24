@@ -122,6 +122,17 @@ extension ShoppingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ShoppingDetailViewController()
+        // 셀 클릭 시 서치바에 검색 키워드 넣음
+        searchBar.text = userDefaultsArr[indexPath.row]
+        vc.keyword = searchBar.text
+        vc.navigationItemTitle = searchBar.text
+        searchBar.resignFirstResponder()
+        navigationController?.pushViewController(vc, animated: true)
+
+    }
+    
 
         
     func configureTableView() {
