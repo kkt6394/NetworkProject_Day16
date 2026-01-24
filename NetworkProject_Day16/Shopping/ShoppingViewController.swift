@@ -46,11 +46,13 @@ class ShoppingViewController: UIViewController {
         configureUI()
         configureTableView()
         userDefaultsArr = UserDefaults.standard.array(forKey: "keyword") as? [String] ?? []
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print(#function)
         tableView.isHidden = true
+
     }
     
     @objc
@@ -92,7 +94,7 @@ extension ShoppingViewController: ViewDesign {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(185)
+            make.height.equalTo(300)
         }
         
         recentKeywordLabel.snp.makeConstraints { make in
@@ -145,15 +147,18 @@ extension ShoppingViewController: UISearchBarDelegate {
         vc.keyword = text
         vc.navigationItemTitle = text
         
-        
-//        guard let saved = UserDefaults.standard.string(forKey: "keyword") else { return }
-
         if userDefaultsArr.contains(text) {
+            
+            userDefaultsArr.removeAll { $0 == text }
+            userDefaultsArr.insert(text, at: 0)
+            UserDefaults.standard.set(userDefaultsArr, forKey: "keyword")
+
             searchBar.resignFirstResponder()
             navigationController?.pushViewController(vc, animated: true)
 
 
         } else {
+            
             userDefaultsArr.insert(text, at: 0)
             UserDefaults.standard.set(userDefaultsArr, forKey: "keyword")
             searchBar.resignFirstResponder()
