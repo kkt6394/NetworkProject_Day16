@@ -11,6 +11,11 @@ import Alamofire
 import Kingfisher
 
 class ShoppingDetailViewController: UIViewController {
+    
+    var currentSort = Sort.sim
+    
+    var total = 1
+    var start = 1
         
     enum Sort: String {
         case sim
@@ -23,7 +28,7 @@ class ShoppingDetailViewController: UIViewController {
     
     var currentData: [ShoppingData.Items] = []
     
-    var keyword: String?
+    var keyword = ""
 
     lazy var resultCountLabel = {
         let label = UILabel()
@@ -146,6 +151,7 @@ class ShoppingDetailViewController: UIViewController {
     }
     
     func callRequest(sort: Sort) {
+        currentSort = sort
         let url = "https://openapi.naver.com/v1/search/shop.json"
         let header: HTTPHeaders = [
             "X-Naver-Client-Id": APIKey.clientID,
@@ -153,17 +159,17 @@ class ShoppingDetailViewController: UIViewController {
         ]
         let param: Parameters = [
             "query": keyword,
-            "display": 100,
+            "display": 30,
+            "start": start,
             "sort": sort
         ]
-        let request = AF.request(url, method: .get, parameters: param, encoding: URLEncoding.queryString, headers: header)
-//        AF.request(
-//            url,
-//            method: .get,
-//            parameters: param,
-//            encoding: URLEncoding.queryString,
-//            headers: header
-//        )
+        let request = AF.request(
+            url,
+            method: .get,
+            parameters: param,
+            encoding: URLEncoding.queryString,
+            headers: header
+        )
         request
         .responseDecodable(of: ShoppingData.self) { response in
             switch response.result {
@@ -171,8 +177,9 @@ class ShoppingDetailViewController: UIViewController {
                 print(#function)
                 print("성공", response.response?.statusCode)
                 self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
-                self.currentData = value.items
+                self.currentData.append(contentsOf: value.items)
                 self.collectionView.reloadData()
+                self.total = value.total
                 print(">>>", request, "<<<")
 
             case .failure(let error):
@@ -195,6 +202,15 @@ extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard total > currentData.count else { return }
+        if indexPath.item == currentData.count - 4 {
+            start += 1
+            callRequest(sort: currentSort)
+        }
+        
+    }
+    
     func setCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -210,6 +226,7 @@ extension ShoppingDetailViewController: UICollectionViewDelegate, UICollectionVi
 extension ShoppingDetailViewController: ViewDesign {
     
     func configureUI() {
+        
         print(self, #function)
         navigationItem.title = navigationItemTitle
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
