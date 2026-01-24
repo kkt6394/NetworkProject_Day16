@@ -9,11 +9,9 @@ import UIKit
 import SnapKit
 
 class ShoppingViewController: UIViewController {
-    var firstUserDefaults: [String] = []
-    lazy var converted = Set(firstUserDefaults)
-    var result: Set<String> = []
-    lazy var data = converted.filter { result.insert($0).inserted }
+
     var userDefaultsArr: [String] = []
+    
     
     lazy var searchBar = {
         let searchBar = UISearchBar()
@@ -47,6 +45,7 @@ class ShoppingViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureTableView()
+        userDefaultsArr = UserDefaults.standard.array(forKey: "keyword") as? [String] ?? []
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,15 +56,18 @@ class ShoppingViewController: UIViewController {
     @objc
     func deleteBtnTapped() {
         userDefaultsArr.removeAll()
+        UserDefaults.standard.set(userDefaultsArr, forKey: "keyword")
+
         tableView.reloadData()
     }
     
     @objc
     func deleteBtnTapped2(_ sender: UIButton) {
         userDefaultsArr.remove(at: sender.tag)
+        UserDefaults.standard.set(userDefaultsArr, forKey: "keyword")
+
         tableView.reloadData()
     }
-    
     
 }
 
@@ -142,12 +144,22 @@ extension ShoppingViewController: UISearchBarDelegate {
         guard let text = searchBar.text/*, text.count >= 2*/ else { return }
         vc.keyword = text
         vc.navigationItemTitle = text
-        UserDefaults.standard.set(text, forKey: "keyword")
-        guard let saved = UserDefaults.standard.string(forKey: "keyword") else { return }
-        userDefaultsArr.insert(saved, at: 0)
-        searchBar.resignFirstResponder()
+        
+        
+//        guard let saved = UserDefaults.standard.string(forKey: "keyword") else { return }
 
-        navigationController?.pushViewController(vc, animated: true)
+        if userDefaultsArr.contains(text) {
+            searchBar.resignFirstResponder()
+            navigationController?.pushViewController(vc, animated: true)
+
+
+        } else {
+            userDefaultsArr.insert(text, at: 0)
+            UserDefaults.standard.set(userDefaultsArr, forKey: "keyword")
+            searchBar.resignFirstResponder()
+            navigationController?.pushViewController(vc, animated: true)
+
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -157,6 +169,7 @@ extension ShoppingViewController: UISearchBarDelegate {
         } else {
             tableView.isHidden = false
         }
+        print(">", userDefaultsArr)
         tableView.reloadData()
         print(#function)
     }
