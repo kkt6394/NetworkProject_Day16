@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NaverError {
+enum NaverError: Error {
     case networkIssue
     case serverMaintenance
     case requestLimit

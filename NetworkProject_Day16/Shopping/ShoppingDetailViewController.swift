@@ -17,13 +17,6 @@ class ShoppingDetailViewController: UIViewController {
     var total = 1
     var start = 1
     
-    enum Sort: String {
-        case sim
-        case date
-        case asc
-        case dsc
-    }
-    
     var navigationItemTitle: String?
     
     var currentData: [ShoppingData.Items] = []
@@ -152,65 +145,22 @@ class ShoppingDetailViewController: UIViewController {
     
     func callRequest(sort: Sort) {
         currentSort = sort
-        let url = "https://openapi.naver.com/v1/search/shop.json"
-        let header: HTTPHeaders = [
-            "X-Naver-Client-Id": "APIKey.clientID",
-            "X-Naver-Client-Secret": APIKey.clientSecret
-        ]
-        let param: Parameters = [
-            "query": keyword,
-            "display": 30,
-            "start": start,
-            "sort": sort
-        ]
-        let request = AF.request(
-            url,
-            method: .get,
-            parameters: param,
-            encoding: URLEncoding.queryString,
-            headers: header
-        )
-        request
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: ShoppingData.self) { response in
-                switch response.result {
+        
+        NetworkManager.shared
+            .callRequest(keyword: keyword, start: start, sort: sort) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
                 case .success(let value):
-                    
-                    print(#function)
-                    print("성공", response.response?.statusCode)
                     self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
                     self.currentData.append(contentsOf: value.items)
                     self.collectionView.reloadData()
                     self.total = value.total
-                    print(">>>", request, "<<<")
                     
                 case .failure(let error):
-                    if let data = response.data {
-                        if let naverError = try? JSONDecoder().decode(NaverAPIError.self, from: data) {
-                            print("코드: ", naverError.errorCode)
-                            print("에러 내용: ", naverError.errorMessage)
-                        }
-                        print(error)
-                        print("실패", response.response?.statusCode)
-                    }
-                    var finalError: NaverError = .apiError
+                    self.showAlert(message: error.alertMessage)
                     
-                    if let statusCode = response.response?.statusCode {
-                        switch statusCode {
-                        case 429:
-                            finalError = .requestLimit
-                        case 500...599:
-                            finalError = .serverMaintenance
-                        case 400, 401, 403, 404:
-                            finalError = .apiError
-                        default:
-                            finalError = .networkIssue
-                        }
-                    } else if error.isSessionTaskError {
-                        finalError = .networkIssue
-                    }
-                    self.showAlert(message: finalError.alertMessage)
                 }
+                
             }
     }
     
