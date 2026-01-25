@@ -16,7 +16,7 @@ class ShoppingDetailViewController: UIViewController {
     
     var total = 1
     var start = 1
-        
+    
     enum Sort: String {
         case sim
         case date
@@ -29,7 +29,7 @@ class ShoppingDetailViewController: UIViewController {
     var currentData: [ShoppingData.Items] = []
     
     var keyword = ""
-
+    
     lazy var resultCountLabel = {
         let label = UILabel()
         label.textColor = .green
@@ -57,7 +57,7 @@ class ShoppingDetailViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         return layout
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -67,7 +67,7 @@ class ShoppingDetailViewController: UIViewController {
         accuracyBtn.setTitleColor(UIColor.black, for: .normal)
         buttonTargetConfigure()
     }
-        
+    
     func buttonTargetConfigure() {
         accuracyBtn.addTarget(
             self,
@@ -171,22 +171,29 @@ class ShoppingDetailViewController: UIViewController {
             headers: header
         )
         request
-        .responseDecodable(of: ShoppingData.self) { response in
-            switch response.result {
-            case .success(let value):
-                print(#function)
-                print("성공", response.response?.statusCode)
-                self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
-                self.currentData.append(contentsOf: value.items)
-                self.collectionView.reloadData()
-                self.total = value.total
-                print(">>>", request, "<<<")
-
-            case .failure(let error):
-                print(error)
-                print("실패", response.response?.statusCode)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: ShoppingData.self) { response in
+                switch response.result {
+                case .success(let value):
+                    
+                    print(#function)
+                    print("성공", response.response?.statusCode)
+                    self.resultCountLabel.text = "\(value.total.formatted()) 개의 검색 결과"
+                    self.currentData.append(contentsOf: value.items)
+                    self.collectionView.reloadData()
+                    self.total = value.total
+                    print(">>>", request, "<<<")
+                    
+                case .failure(let error):
+                    guard let data = response.data else { return }
+                    if let naverError = try? JSONDecoder().decode(NaverAPIError.self, from: data) {
+                        print("코드: ", naverError.errorCode)
+                        print("에러 내용: ", naverError.errorMessage)
+                    }
+                    print(error)
+                    print("실패", response.response?.statusCode)
+                }
             }
-        }
     }
 }
 
