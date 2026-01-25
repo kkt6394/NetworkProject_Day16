@@ -154,7 +154,7 @@ class ShoppingDetailViewController: UIViewController {
         currentSort = sort
         let url = "https://openapi.naver.com/v1/search/shop.json"
         let header: HTTPHeaders = [
-            "X-Naver-Client-Id": APIKey.clientID,
+            "X-Naver-Client-Id": "APIKey.clientID",
             "X-Naver-Client-Secret": APIKey.clientSecret
         ]
         let param: Parameters = [
@@ -185,15 +185,39 @@ class ShoppingDetailViewController: UIViewController {
                     print(">>>", request, "<<<")
                     
                 case .failure(let error):
-                    guard let data = response.data else { return }
-                    if let naverError = try? JSONDecoder().decode(NaverAPIError.self, from: data) {
-                        print("코드: ", naverError.errorCode)
-                        print("에러 내용: ", naverError.errorMessage)
+                    if let data = response.data {
+                        if let naverError = try? JSONDecoder().decode(NaverAPIError.self, from: data) {
+                            print("코드: ", naverError.errorCode)
+                            print("에러 내용: ", naverError.errorMessage)
+                        }
+                        print(error)
+                        print("실패", response.response?.statusCode)
                     }
-                    print(error)
-                    print("실패", response.response?.statusCode)
+                    var finalError: NaverError = .apiError
+                    
+                    if let statusCode = response.response?.statusCode {
+                        switch statusCode {
+                        case 429:
+                            finalError = .requestLimit
+                        case 500...599:
+                            finalError = .serverMaintenance
+                        case 400, 401, 403, 404:
+                            finalError = .apiError
+                        default:
+                            finalError = .networkIssue
+                        }
+                    } else if error.isSessionTaskError {
+                        finalError = .networkIssue
+                    }
+                    self.showAlert(message: finalError.alertMessage)
                 }
             }
+    }
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "안내", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }
 
